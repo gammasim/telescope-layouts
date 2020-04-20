@@ -17,7 +17,7 @@ class ArrayData:
     - conversion of coordinate systems of positions
     """
 
-    def __init__(self, verbose_debug = True):
+    def __init__(self, verbose_debug=True):
         """Inits ArrayData with blah."""
         self.name = None
         self.telescope_list = []
@@ -29,7 +29,6 @@ class ArrayData:
         self.center_lat = None
         self.center_altitude = math.nan*u.meter
         self.verbose = verbose_debug
-
 
     def read_telescope_list(self, telescope_file):
         """

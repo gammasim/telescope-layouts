@@ -63,7 +63,6 @@ class TelescopeData:
                                                           self.x.value,
                                                           self.y.value)
 
-
     def convert_local_to_utm(self, crs_local, crs_utm):
         """
         convert telescope position from local to utm
@@ -75,8 +74,8 @@ class TelescopeData:
         if math.isnan(self.utm_east.value) or math.isnan(self.utm_north.value):
             self.utm_east, self.utm_north = \
                 u.meter * \
-                pyproj.transform(crs_local, crs_utm, self.x.value, self.y.value)
-
+                pyproj.transform(crs_local, crs_utm,
+                                 self.x.value, self.y.value)
 
     def convert_utm_to_mercator(self, crs_utm, wgs84):
         """
@@ -97,7 +96,6 @@ class TelescopeData:
                                  self.utm_east.value,
                                  self.utm_north.value)
 
-
     def convert_utm_to_local(self, crs_utm, crs_local):
         """
         convert telescope position from utm to local
@@ -113,7 +111,7 @@ class TelescopeData:
             self.x, self.y = u.meter * \
                 pyproj.transform(crs_utm, crs_local,
                                  self.utm_east.value,
-                                 self.utm_north.value) \
+                                 self.utm_north.value)
 
     def convert_altitude(self, center_altitude):
         """
