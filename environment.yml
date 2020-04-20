@@ -10,6 +10,7 @@ dependencies:
   - python==3.7
   - proj
   - pep8
+  - pylint
   - numpy
   - astropy
   - matplotlib

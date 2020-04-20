@@ -1,6 +1,7 @@
-#
-#
-import sys
+"""
+arrayData class descripe an array of telescopes
+"""
+
 import math
 from astropy.table import Table
 from astropy import units as u
@@ -9,89 +10,90 @@ import pyproj
 import layout_telescope
 
 
-class arrayData:
+class ArrayData:
     """
     layout class for
     - storage of telescope position
     - conversion of coordinate systems of positions
     """
 
-    def __init__(self):
+    def __init__(self, verbose_debug = True):
+        """Inits ArrayData with blah."""
         self.name = None
         self.telescope_list = []
         # centre of the array
-        self.EPSG = math.nan
+        self.epsg = math.nan
         self.center_northing = math.nan*u.meter
         self.center_easting = math.nan*u.meter
         self.center_lon = None
         self.center_lat = None
         self.center_altitude = math.nan*u.meter
+        self.verbose = verbose_debug
 
-        self.verbose = True
 
     def read_telescope_list(self, telescope_file):
         """
         read list of telescopes from a ecsv file
         """
         try:
-            t = Table.read(telescope_file,  format='ascii.ecsv')
+            table = Table.read(telescope_file, format='ascii.ecsv')
         except Exception as ex:
             print('Error reading telescope list from ', telescope_file)
             print(ex.args)
             return False
         if self.verbose:
-            print(t.meta)
-            print(t)
+            print(table.meta)
+            print(table)
         print("reading telescope list from ", telescope_file)
         # require telescope_name in telescope lists
-        if 'telescope_name' not in t.colnames:
+        if 'telescope_name' not in table.colnames:
             print('Error reading telescope list from ', telescope_file)
             print('   required column telescope_name missing')
-            print(t.meta)
+            print(table.meta)
             return False
         # reference coordinate system
-        if 'EPSG' in t.meta:
-            self.EPSG = t.meta['EPSG']
-        if 'center_northing' in t.meta and \
-                'center_easting' in t.meta:
-            self.center_northing = u.Quantity(t.meta['center_northing'])
-            self.center_easting = u.Quantity(t.meta['center_easting'])
-        if 'center_lon' in t.meta and \
-                'center_lat' in t.meta:
-            self.center_lon = u.Quantity(t.meta['center_lon'])
-            self.center_lat = u.Quantity(t.meta['center_lat'])
-        if 'center_alt' in t.meta:
-            self.center_altitude = u.Quantity(t.meta['center_alt'])
+        if 'EPSG' in table.meta:
+            self.epsg = table.meta['EPSG']
+        if 'center_northing' in table.meta and \
+                'center_easting' in table.meta:
+            self.center_northing = u.Quantity(table.meta['center_northing'])
+            self.center_easting = u.Quantity(table.meta['center_easting'])
+        if 'center_lon' in table.meta and \
+                'center_lat' in table.meta:
+            self.center_lon = u.Quantity(table.meta['center_lon'])
+            self.center_lat = u.Quantity(table.meta['center_lat'])
+        if 'center_alt' in table.meta:
+            self.center_altitude = u.Quantity(table.meta['center_alt'])
         # initialise telescope lists from productions
         prod_list = []
-        for row_name in t.colnames:
+        for row_name in table.colnames:
             if row_name.find("prod") >= 0:
                 prod_list.append(row_name)
 
-        for row in t:
-            tel = layout_telescope.telescopeData()
+        for row in table:
+            tel = layout_telescope.TelescopeData()
             tel.name = row['telescope_name']
-            if 'pos_x' in t.colnames:
+            if 'pos_x' in table.colnames:
                 # TMPTMP
-                tel.y = -1.*row['pos_x']*t['pos_x'].unit
-            if 'pos_y' in t.colnames:
+                tel.y = -1.*row['pos_x']*table['pos_x'].unit
+            if 'pos_y' in table.colnames:
                 # TMPTMP
-                tel.x = row['pos_y']*t['pos_y'].unit
-            if 'pos_z' in t.colnames:
-                tel.z = row['pos_z']*t['pos_z'].unit
-            if 'utm_east' in t.colnames:
-                tel.utm_east = row['utm_east']*t['utm_east'].unit
-            if 'utm_north' in t.colnames:
-                tel.utm_north = row['utm_north']*t['utm_north'].unit
-            if 'alt' in t.colnames:
-                tel.alt = row['alt']*t['alt'].unit
-            if 'lon' in t.colnames:
-                tel.lon = row['lon']*t['lon'].unit
-            if 'lat' in t.colnames:
-                tel.utm_north = row['lat']*t['lat'].unit
+                tel.x = row['pos_y']*table['pos_y'].unit
+            if 'pos_z' in table.colnames:
+                tel.z = row['pos_z']*table['pos_z'].unit
+            if 'utm_east' in table.colnames:
+                tel.utm_east = row['utm_east']*table['utm_east'].unit
+            if 'utm_north' in table.colnames:
+                tel.utm_north = row['utm_north']*table['utm_north'].unit
+            if 'alt' in table.colnames:
+                tel.alt = row['alt']*table['alt'].unit
+            if 'lon' in table.colnames:
+                tel.lon = row['lon']*table['lon'].unit
+            if 'lat' in table.colnames:
+                tel.utm_north = row['lat']*table['lat'].unit
 
-            for p in prod_list:
-                tel.prod_id[p] = row[p]
+            for prod in prod_list:
+                tel.prod_id[prod] = row[prod]
 
             self.telescope_list.append(tel)
 
@@ -101,6 +103,8 @@ class arrayData:
         """
         read a layout from a layout yaml file
         """
+
+        print(layout_name, layout_file)
 
         return None
 
@@ -112,8 +116,8 @@ class arrayData:
         - telescope_name - default telescope names
         - prod3b_mst_N - North layout (with MST-NectarCam)
         """
-        for e in self.telescope_list:
-            e.print_telescope()
+        for tel in self.telescope_list:
+            tel.print_telescope()
 
         return None
 
@@ -132,7 +136,7 @@ class arrayData:
             print("\t Northing {0:0.2f}".format(self.center_northing))
             print("\t Easting {0:0.2f}".format(self.center_easting))
         print("\t Altitude {0:0.2f}".format(self.center_altitude))
-        print("\t EGSP %s" % (self.EPSG))
+        print("\t EGSP %s" % (self.epsg))
 
     def convert(self):
         """
@@ -157,66 +161,28 @@ class arrayData:
             proj4_string = "+proj=tmerc +ellps=WGS84 +datum=WGS84"
             proj4_string = "%s +lon_0=%s +lat_0=%s" % \
                 (proj4_string,
-                    self.center_lon.value,
-                    self.center_lat.value)
+                 self.center_lon.value,
+                 self.center_lat.value)
             proj4_string = "%s +axis=nwu +units=m +k=1.0" % \
                 (proj4_string)
             crs_local = pyproj.CRS.from_proj4(proj4_string)
         # UTM system
         crs_utm = None
-        if not math.isnan(self.EPSG):
-            crs_utm = pyproj.CRS.from_user_input(self.EPSG)
+        if not math.isnan(self.epsg):
+            crs_utm = pyproj.CRS.from_user_input(self.epsg)
 
         print('Converting telescope coordinates')
+        print('\t Local Mercator projection:', crs_local)
+        print('\t UTM system: ', crs_utm)
 
-        # first possibilities: crs_local given
-        if crs_local:
-            print('Local Mercator projection:', crs_local)
-            for t in self.telescope_list:
-                if not math.isnan(t.x.value) \
-                        and not math.isnan(t.y.value):
-                    # calculate lon/lat
-                    if math.isnan(t.lon.value) \
-                            or math.isnan(t.lat.value):
-                        t.lon, t.lat = \
-                                pyproj.transform(crs_local, wgs84,
-                                                 t.x.value, t.y.value) \
-                                * u.deg
-                    # calculate utm coordinates
-                    if crs_utm and \
-                            (math.isnan(t.utm_east.value)
-                             or math.isnan(t.utm_north.value)):
-                        t.utm_east, t.utm_north = \
-                                pyproj.transform(crs_local, crs_utm,
-                                                 t.x.value, t.y.value) \
-                                * u.meter
-        # second possibility: crs_utm given
-        if crs_utm:
-            print('UTM system: ', crs_utm)
-            for t in self.telescope_list:
-                if not math.isnan(t.utm_east.value) \
-                        and not math.isnan(t.utm_north.value):
-                    # calculate lon/lat
-                    if math.isnan(t.lon.value) \
-                            or math.isnan(t.lat.value):
-                        t.lon, t.lat = \
-                                pyproj.transform(crs_utm, wgs84,
-                                                 t.utm_east.value,
-                                                 t.utm_north.value) \
-                                * u.deg
-                    if math.isnan(t.x.value) or math.isnan(t.y.value):
-                        t.x, t.y = \
-                                pyproj.transform(crs_utm, crs_local,
-                                                 t.utm_east.value,
-                                                 t.utm_north.value) \
-                                * u.meter
-
-        # altitude
-        if not math.isnan(self.center_altitude.value):
-            for t in self.telescope_list:
-                if math.isnan(t.z.value) and \
-                        not math.isnan(t.alt.value):
-                    t.z = t.alt-self.center_altitude
-                if math.isnan(t.alt.value) and \
-                        not math.isnan(t.z.value):
-                    t.alt = t.z+self.center_altitude
+        for tel in self.telescope_list:
+            # first possibilities: crs_local given
+            if crs_local:
+                tel.convert_local_to_mercator(crs_local, wgs84)
+                tel.convert_local_to_utm(crs_local, crs_utm)
+            # second possibility: crs_utm given
+            if crs_utm:
+                tel.convert_utm_to_mercator(crs_utm, wgs84)
+                tel.convert_utm_to_local(crs_utm, crs_local)
+            # convert altitude
+            tel.convert_altitude(self.center_altitude)

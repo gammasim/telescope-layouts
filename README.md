@@ -4,9 +4,9 @@
 
 Tools to calculate and plot array layouts and telescope positions
 
-## Install:
+## Install
 
-```
+```bash
 conda env create -f environment.yml
 conda activate telescopes
 ```
@@ -15,6 +15,6 @@ conda activate telescopes
 
 Print a simple list of telescopes in all three coordinate systems
 
-```
+```python
 python ./print_layout.py --telescope_list=data/telescope_positions_south.ecsv --layout_list=data/layouts_south.yaml
 ```

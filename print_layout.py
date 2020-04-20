@@ -1,13 +1,13 @@
 #!/usr/bin/python
-#
-# print a list of telescopes or array layout
-#
+"""
+print a list of telescopes or array layout
+"""
 import getopt
 import sys
 import layout_array
 
 
-def printHelp():
+def print_help():
     """
     print help messages
     """
@@ -30,6 +30,8 @@ def main(argv):
     telescope_list = None
     array_list = None
     array_layout = "baseline"
+    use_utm = False
+    verbose = False
 
     try:
         opts, args = getopt.getopt(argv, "h",
@@ -39,29 +41,29 @@ def main(argv):
                                     "UTM",
                                     "help"])
     except getopt.GetoptError:
-        printHelp()
+        print_help()
 
     if len(opts) == 0:
-        printHelp()
+        print_help()
 
     for opt, arg in opts:
-        if opt == '-h' or opt == "--help":
-            printHelp()
+        if opt == ('-h', '--help'):
+            print_help()
             sys.exit()
-        elif opt in ("--telescope_list"):
+        elif opt in "--telescope_list":
             telescope_list = arg
-        elif opt in ("--layout_list"):
+        elif opt in "--layout_list":
             layout_list = arg
-        elif opt in ("--layout"):
+        elif opt in "--layout":
             layout = arg
-        elif opt in ("--UTM"):
-            UTM = True
-        elif opt in ("--verbose"):
+        elif opt in "--UTM":
+            use_utm = True
+        elif opt in "--verbose":
             verbose = True
         else:
-            printHelp()
+            print_help()
 
-    layout = layout_array.arrayData()
+    layout = layout_array.ArrayData(verbose)
     if layout.read_telescope_list(telescope_list):
         layout.convert()
         layout.print_array_center()
