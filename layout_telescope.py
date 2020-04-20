@@ -47,6 +47,7 @@ class TelescopeData:
         if len(self.prod_id) > 0:
             print("\t", self.prod_id)
 
+
     def convert_local_to_mercator(self, crs_local, wgs84):
         """
         convert telescope position from local to mercator
@@ -84,8 +85,8 @@ class TelescopeData:
         if not crs_utm or not wgs84:
             return
 
-        if not math.isnan(self.utm_east.value) \
-                and not math.isnan(self.utm_north.value):
+        if math.isnan(self.utm_east.value) \
+                or math.isnan(self.utm_north.value):
             return
 
         # calculate lon/lat
@@ -103,8 +104,8 @@ class TelescopeData:
         if not crs_utm or not crs_local:
             return
 
-        if not math.isnan(self.utm_east.value) \
-                and not math.isnan(self.utm_north.value):
+        if math.isnan(self.utm_east.value) \
+                or math.isnan(self.utm_north.value):
             return
 
         if math.isnan(self.x.value) or math.isnan(self.y.value):
@@ -124,3 +125,14 @@ class TelescopeData:
             if math.isnan(self.alt.value) and \
                     not math.isnan(self.z.value):
                 self.alt = self.z+center_altitude
+
+    def convert(self, crs_local, wgs84, crs_utm, center_altitude):
+        """
+        calculate telescope positions in missing coordinate
+        systems
+        """
+        self.convert_local_to_mercator(crs_local, wgs84)
+        self.convert_local_to_utm(crs_local, crs_utm)
+        self.convert_utm_to_mercator(crs_utm, wgs84)
+        self.convert_utm_to_local(crs_utm, crs_local)
+        self.convert_altitude(center_altitude)

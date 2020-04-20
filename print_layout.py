@@ -30,7 +30,6 @@ def main(argv):
     telescope_list = None
     array_list = None
     array_layout = "baseline"
-    use_utm = False
     verbose = False
 
     try:
@@ -38,7 +37,6 @@ def main(argv):
                                    ["telescope_list=",
                                     "layout_list=",
                                     "layout=",
-                                    "UTM",
                                     "help"])
     except getopt.GetoptError:
         print_help()
@@ -56,8 +54,6 @@ def main(argv):
             layout_list = arg
         elif opt in "--layout":
             layout = arg
-        elif opt in "--UTM":
-            use_utm = True
         elif opt in "--verbose":
             verbose = True
         else:
