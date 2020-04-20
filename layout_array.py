@@ -73,11 +73,9 @@ class ArrayData:
             tel = layout_telescope.TelescopeData()
             tel.name = row['telescope_name']
             if 'pos_x' in table.colnames:
-                # TMPTMP
-                tel.y = -1.*row['pos_x']*table['pos_x'].unit
+                tel.x = row['pos_x']*table['pos_x'].unit
             if 'pos_y' in table.colnames:
-                # TMPTMP
-                tel.x = row['pos_y']*table['pos_y'].unit
+                tel.y = row['pos_y']*table['pos_y'].unit
             if 'pos_z' in table.colnames:
                 tel.z = row['pos_z']*table['pos_z'].unit
             if 'utm_east' in table.colnames:
