@@ -18,3 +18,15 @@ Print a simple list of telescopes in all three coordinate systems
 ```python
 python ./print_layout.py --telescope_list=data/telescope_positions_south.ecsv --layout_list=data/layouts_south.yaml
 ```
+
+Compare two list of telescopes:
+
+Compare positions:
+```python
+python compare_layouts.py --telescope_list_1=data/telescope_positions_south.ecsv --telescope_list_2=data/SB.ecsv  --coordinatesystem="utm"
+```
+
+Compare altitude of telescopes (print only if differences are >1m)
+```python
+python compare_layouts.py --telescope_list_1=data/telescope_positions_south.ecsv --telescope_list_2=data/SB2.ecsv  --coordinatesystem="altitude" --tolerance=1.
+```
