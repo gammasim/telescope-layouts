@@ -1,0 +1,14 @@
+---
+baseline:
+    other_names: [AL4-BN15, AL4-BF15]
+    telescope_list: [L-01, L-02, L-03, L-04, M-01, M-02, M-03, M-05, M-04, M-06, M-07, M-08, M-10, M-11, M-12, M-13, M-14, M-15, M-09]
+    comment: >
+        baseline layout with 4 LSTs and 15 MSTs
+        for CTA N (La Palma)
+
+phase_1:
+    other_names: [threshold_north, AL4-BN15-TI]
+    telescope_list_prod3b_mst_N: [5, 6, 7, 8, 58, 59, 60, 65, 75]
+    comment: >
+        threshold layout with 4 LSTs and 5 MSTs
+        for CTA N (La Palma)

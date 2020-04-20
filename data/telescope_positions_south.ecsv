@@ -1,0 +1,122 @@
+# %ECSV 0.9
+# ---
+# datatype:
+# - {name: telescope_name, datatype: string, description: common telescope name}
+# - {name: pos_x, unit: m, datatype: float32, description: telescope position towards North relative to MST01 (central MST)}
+# - {name: pos_y, unit: m, datatype: float32, description: telescope position towards West relative to MST01 (central MST)}
+# - {name: pos_z, unit: m, datatype: float32, description: telescope position upwards relative to NNN}
+# - {name: prod3b_mst_F, datatype: int, description: telescope ID for MST-FlashCam configuration in prod3b}
+# - {name: prod3b_mst_N, datatype: int, description: telescope ID for MST-NectarCam configuration in prod3b}
+# - {name: baseline, datatype: bool, description: telescope position is part of baseline}
+# meta: !!omap
+# - data_type: positionfile
+# - description: "telescope positions for CTA South (Paranal)"
+# - center_lon: "-70.316345 deg"
+# - center_lat: "-24.683429 deg"
+# - center_alt: "2163m"
+# - center_northing: "7269466.02 m"
+# - center_easting: "366822.0 m"
+# - EPSG: 32719
+# - comments: |
+#       version 0.1
+#       coordinate centres using WGS84 system
+telescope_name    pos_x    pos_y   pos_z    prod3b_mst_F    prod3b_mst_N   baseline
+L-01       65.00      -20.00          16         5          5    True
+L-02       -0.00       80.00          16         6          6    True
+L-03      -65.00      -20.00          16         4          4    True
+L-04       -0.00     -120.00          16        11          11    True
+M-01       -0.00        0.00          10        12          53    True
+M-02      151.20        0.00          10        14          55    True
+M-03      325.24        0.00          10        30          71    True
+M-04     -151.20        0.00          10        13          54    True
+M-05     -325.24        0.00          10        29          70    True
+M-06     -238.47      154.21          10        23          64    True
+M-07      -75.60      146.66          10        15          56    True
+M-08       75.60      146.66          10        16          57    True
+M-09      238.47      154.21          10        24          65    True
+M-10     -238.47     -154.21          10        26          67    True
+M-11      -85.60     -146.66          10        19          60    True
+M-12       85.60     -146.66          10        20          61    True
+M-13      238.47     -154.21          10        27          68    True
+M-14     -450.15      291.08          10        47          88    True
+M-15     -162.62      315.47          10        31          72    True
+M-16       -0.00      308.41          10        25          66    True
+M-17      162.62      315.47          10        32          73    True
+M-18      450.15      291.08          10        48          89    True
+M-19     -450.15     -291.08          10        50          91    True
+M-20     -162.62     -315.47          10        33          74    True
+M-21       -0.00     -308.41          10        28          69    True
+M-22      162.62     -315.47          10        34          75    True
+M-23      450.15     -291.08          10        51          92    True
+M-24       -0.00      582.17          10        49          90    True
+M-25       -0.00     -582.17          10        52          93    True
+S-01     -158.90      205.50           5       257          257    True
+S-02      158.90      205.50           5       258          258    True
+S-03     -158.90     -205.50           5       259          259    True
+S-04      158.90     -205.50           5       260          260    True
+S-05     -424.82      164.82           5       268          268    True
+S-06      424.82      164.82           5       269          269    True
+S-07     -424.82     -164.82           5       274          274    True
+S-08      424.82     -164.82           5       275          275    True
+S-09     -519.79        0.00           5       284          284    True
+S-10      519.79        0.00           5       285          285    True
+S-11     -403.74      391.61           5       290          290    True
+S-12      403.74      391.61           5       291          291    True
+S-13     -403.74     -391.61           5       292          292    True
+S-14      403.74     -391.61           5       293          293    True
+S-15     -110.00      494.47           5       280          280    True
+S-16      110.00      494.47           5       281          281    True
+S-17     -110.00     -494.47           5       282          282    True
+S-18      110.00     -494.47           5       283          283    True
+S-19     -723.53        0.00           5       316          316    True
+S-20      723.53        0.00           5       317          317    True
+S-21     -318.61      618.07           5       300          300    True
+S-22      318.61      618.07           5       301          301    True
+S-23     -318.61     -618.07           5       302          302    True
+S-24      318.61     -618.07           5       303          303    True
+S-25     -673.19      435.30           5       324          324    True
+S-26      673.19      435.30           5       325          325    True
+S-27     -673.19     -435.30           5       327          327    True
+S-28      673.19     -435.30           5       328          328    True
+S-29       -0.00      820.00           5       322          322    True
+S-30       -0.00     -820.00           5       323          323    True
+S-31     -796.90      220.84           5       342          342    True
+S-32      796.90      220.84           5       343          343    True
+S-33     -796.90     -220.84           5       348          348    True
+S-34      796.90     -220.84           5       349          349    True
+S-35     -944.30        0.00           5       366          366    True
+S-36      944.30        0.00           5       367          367    True
+S-37     -569.22      662.53           5       344          344    True
+S-38      569.22      662.53           5       345          345    True
+S-39     -569.22     -662.53           5       350          350    True
+S-40      569.22     -662.53           5       351          351    True
+S-41     -227.69      883.38           5       346          346    True
+S-42      227.69      883.38           5       347          347    True
+S-43     -227.69     -883.38           5       352          352    True
+S-44      227.69     -883.38           5       353          353    True
+S-45     -472.15      915.92           5       368          368    True
+S-46      472.15      915.92           5       369          369    True
+S-47     -472.15     -915.92           5       370          370    True
+S-48      472.15     -915.92           5       371          371    True
+S-49     -971.21      471.01           5       380          380    True
+S-50      971.21      471.01           5       381          381    True
+S-51     -971.21     -471.01           5       384          384    True
+S-52      971.21     -471.01           5       385          385    True
+S-53     -849.81      706.52           5       382          382    True
+S-54      849.81      706.52           5       383          383    True
+S-55     -849.81     -706.52           5       386          386    True
+S-56      849.81     -706.52           5       387          387    True
+S-57       -0.00     1100.00           5       378          378    True
+S-58       -0.00    -1100.00           5       379          379    True
+S-59    -1109.73      239.20           5       392          392    True
+S-60     1109.73      239.20           5       393          393    True
+S-61    -1109.73     -239.20           5       396          396    True
+S-62     1109.73     -239.20           5       397          397    True
+S-63     -739.82      956.79           5       394          394    True
+S-64      739.82      956.79           5       395          395    True
+S-65     -739.82     -956.79           5       398          398    True
+S-66      739.82     -956.79           5       399          399    True
+S-67     -369.91     1195.98           5       400          400    True
+S-68      369.91     1195.98           5       401          401    True
+S-69     -369.91    -1195.98           5       402          402    True
+S-70      369.91    -1195.98           5       403          403    True

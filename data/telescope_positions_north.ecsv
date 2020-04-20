@@ -1,0 +1,34 @@
+# %ECSV 0.9
+# ---
+# datatype:
+# - {name: telescope_name, datatype: string, description: common telescope name}
+# - {name: pos_x, unit: m, datatype: float32, description: telescope position towards North relative to MST15 (central MST)}
+# - {name: pos_y, unit: m, datatype: float32, description: telescope position towards West relative to MST15 (central MST)}
+# - {name: prod3b_mst_N, datatype: int, description: telescope ID for MST-NectarCam configuration in prod3b}
+# - {name: prod3b_mst_F, datatype: int, description: telescope ID for MST-FlashCam configuration in prod3b}
+# - {name: baseline, datatype: bool, description: telescope position is part of baseline}
+# meta: !!omap
+# - data_type: positionfile
+# - description: "telescope positions for CTA North (La Palma)"
+# - comments: |
+#       version 0.1
+telescope_name    pos_x    pos_y    prod3b_mst_N    prod3b_mst_F    baseline
+L-01        7.23      -70.04           5             5    T
+L-02     -110.98      -34.37           6             6    T
+L-03      -95.34       76.18           7             7    T
+L-04        19.7       31.81           8             8    T
+M-01      -50.51     -210.65          58            24    T
+M-02     -223.02     -179.06          59            25    T
+M-03     -243.56       27.96          60            26    T
+M-05      134.56      124.21          62            28    T
+M-04      -127.9      176.27          61            27    T
+M-06      144.16      -74.73          63            29    T
+M-07      122.52     -214.79          64            30    T
+M-08     -376.45      -98.11          65            31    T
+M-10      307.61       21.08          67            33    T
+M-11      290.24      -196.4          68            34    T
+M-12      -384.6     -302.85          74            40    T
+M-13        -175        -345          75            41    T
+M-14       33.39     -374.99          76            42    T
+M-15      -44.85         0.9          72            38    T
+M-09      267.84      204.28         117           112    T
