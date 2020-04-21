@@ -96,12 +96,12 @@ class ArrayData:
 
         return True
 
-    def read_layout(self, layout_name, layout_file):
+    def read_layout(self, layout_list, layout_name):
         """
         read a layout from a layout yaml file
         """
 
-        print(layout_name, layout_file)
+        print(layout_name, layout_list)
 
         return None
 
@@ -135,7 +135,7 @@ class ArrayData:
         print("\t Altitude {0:0.2f}".format(self.center_altitude))
         print("\t EGSP %s" % (self.epsg))
 
-    def convert(self):
+    def convert_coordinates(self):
         """
         conversion depends what is given in the orginal
         telescope list

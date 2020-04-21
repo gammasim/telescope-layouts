@@ -47,7 +47,6 @@ class TelescopeData:
         if len(self.prod_id) > 0:
             print("\t", self.prod_id)
 
-
     def convert_local_to_mercator(self, crs_local, wgs84):
         """
         convert telescope position from local to mercator
