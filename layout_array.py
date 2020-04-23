@@ -162,7 +162,7 @@ class ArrayData:
                 (proj4_string,
                  self.center_lon.value,
                  self.center_lat.value)
-            proj4_string = "%s +axis=nwu +units=m +k=1.0" % \
+            proj4_string = "%s +axis=nwu +units=m +k_0=1.0" % \
                 (proj4_string)
             crs_local = pyproj.CRS.from_proj4(proj4_string)
             print('\t Local Mercator projection:', crs_local)
