@@ -5,6 +5,7 @@ Telescope data class
 """
 import math
 from astropy import units as u
+import logging
 import pyproj
 
 
@@ -31,34 +32,38 @@ class TelescopeData:
         """
         print telescope name and positions
         """
-        print("%s" % self.name)
+        print('%s' % self.name)
         if not math.isnan(self.x.value) \
                 and not math.isnan(self.y.value):
-            print("\t x(->North): {0:0.2f} y(->West): {1:0.2f} z: {2:0.2f}"
+            print('\t x(->North): {0:0.2f} y(->West): {1:0.2f} z: {2:0.2f}'
                   .format(self.x, self.y, self.z))
         if not math.isnan(self.utm_east.value) \
                 and not math.isnan(self.utm_north.value):
-            print("\t UTM East: {0:0.2f} UTM North: {1:0.2f} Alt: {2:0.2f}"
+            print('\t UTM East: {0:0.2f} UTM North: {1:0.2f} Alt: {2:0.2f}'
                   .format(self.utm_east, self.utm_north, self.alt))
         if not math.isnan(self.lon.value) \
                 and not math.isnan(self.lat.value):
-            print("\t Longitude: {0:0.5f} Latitude: {1:0.5f}"
+            print('\t Longitude: {0:0.5f} Latitude: {1:0.5f}'
                   .format(self.lon, self.lat))
         if len(self.prod_id) > 0:
-            print("\t", self.prod_id)
+            print('\t', self.prod_id)
 
     def convert_local_to_mercator(self, crs_local, wgs84):
         """
         convert telescope position from local to mercator
         """
+
+        # require valid coordinate systems
         if not crs_local or not wgs84:
             return
 
+        # require valid position in local coordinates
         if math.isnan(self.x.value) or math.isnan(self.y.value):
             return
 
-        # calculate lon/lat
+        # calculate lon/lat of a telescope
         if math.isnan(self.lon.value) or math.isnan(self.lat.value):
+            
             self.lon, self.lat = u.deg * pyproj.transform(crs_local, wgs84,
                                                           self.x.value,
                                                           self.y.value)
@@ -67,10 +72,16 @@ class TelescopeData:
         """
         convert telescope position from local to utm
         """
+
+        # require valid coordinate systems
         if not crs_local or not crs_utm:
             return
 
-        # calculate utms
+        # require valid position in local coordinates
+        if math.isnan(self.x.value) or math.isnan(self.y.value):
+            return
+
+        # calculate utms of a telescope
         if math.isnan(self.utm_east.value) or math.isnan(self.utm_north.value):
             self.utm_east, self.utm_north = \
                 u.meter * \
@@ -81,14 +92,17 @@ class TelescopeData:
         """
         convert telescope position from utm to mercator
         """
+
+        # require valid coordinate systems
         if not crs_utm or not wgs84:
             return
 
+        # require valid position in UTM
         if math.isnan(self.utm_east.value) \
                 or math.isnan(self.utm_north.value):
             return
 
-        # calculate lon/lat
+        # calculate lon/lat of a telescope
         if math.isnan(self.lon.value) \
                 or math.isnan(self.lat.value):
             self.lon, self.lat = u.deg * \
@@ -100,9 +114,12 @@ class TelescopeData:
         """
         convert telescope position from utm to local
         """
+
+        # require valid coordinate systems
         if not crs_utm or not crs_local:
             return
 
+        # require valid position in UTM
         if math.isnan(self.utm_east.value) \
                 or math.isnan(self.utm_north.value):
             return
@@ -117,6 +134,8 @@ class TelescopeData:
         """
         convert telescope altitude to local or global
         """
+
+        # require valid center altitude values
         if not math.isnan(center_altitude.value):
             if math.isnan(self.z.value) and \
                     not math.isnan(self.alt.value):
