@@ -23,10 +23,10 @@ Compare two list of telescopes:
 
 Compare positions:
 ```python
-python compare_layouts.py --coordinatesystem="utm" data/telescope_positions_south.ecsv data/CTAO_20170929.ecsv
+python compare_layouts.py data/telescope_positions_south.ecsv data/CTAO_20170929.ecsv
 ```
 
 Compare altitude of telescopes (print only if differences are >1m)
 ```python
-python compare_layouts.py --coordinatesystem="altitude" --tolerance=1. data/telescope_positions_south.ecsv data/CTAO_20170929.ecsv
+python compare_layouts.py --tolerance=1. data/telescope_positions_south.ecsv data/CTAO_20170929.ecsv
 ```

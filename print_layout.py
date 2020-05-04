@@ -32,8 +32,9 @@ def main():
     if layout.read_telescope_list(args.telescope_list):
         layout.convert_coordinates()
         layout.print_array_center()
+        layout.print_corsika_parameters()
         layout.read_layout(args.layout_list, args.layout_name)
-        layout.print_telescope_list()
+        layout.print_telescope_list(False)
 
 
 if __name__ == '__main__':

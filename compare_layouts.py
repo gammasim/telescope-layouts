@@ -22,12 +22,11 @@ def main():
                         help='telescope list #1')
     parser.add_argument('telescope_list_2',
                         help='telescope list #2')
-    parser.add_argument("--coordinatesystem",
-                        help='coordinate system',
-                        choices=['local', 'utm', 'mercator', 'altitude'],
-                        default='local')
-    parser.add_argument('--tolerance',
-                        help='minimum difference between positions for printing',
+    parser.add_argument('--tolerance_geod',
+                        help='minimum difference between telescope positions for printing',
+                        type=float, default=0.)
+    parser.add_argument('--tolerance_alt',
+                        help='minimum difference between telescope altitude for printing',
                         type=float, default=0.)
     args = parser.parse_args()
 
@@ -40,8 +39,8 @@ def main():
 
         layout_1.compare_array_center(layout_2)
         layout_1.compare_telescope_positions(layout_2,
-                                             args.coordinatesystem,
-                                             args.tolerance)
+                                             args.tolerance_geod,
+                                             args.tolerance_alt)
 
 
 if __name__ == '__main__':

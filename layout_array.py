@@ -31,6 +31,10 @@ class ArrayData:
         self.center_lon = None
         self.center_lat = None
         self.center_altitude = math.nan*u.meter
+        # CORSIKA parameters
+        self.corsika_obslevel = math.nan*u.meter
+        self.corsika_sphere_radius = {}
+        self.corsika_sphere_center = {}
 
     def _append_telescope(self, row, table, prod_list):
         """Append a new telescope from table row
@@ -94,6 +98,16 @@ class ArrayData:
             self.center_lat = u.Quantity(table.meta['center_lat'])
         if 'center_alt' in table.meta:
             self.center_altitude = u.Quantity(table.meta['center_alt'])
+        # CORSIKA parameters
+        if 'corsika_obs_level' in table.meta:
+            self.corsika_obslevel = u.Quantity(table.meta['corsika_obs_level'])
+        if 'corsika_sphere_center' in table.meta:
+            for key, value in table.meta['corsika_sphere_center'].items():
+                self.corsika_sphere_center[key] = u.Quantity(value)
+        if 'corsika_sphere_radius' in table.meta:
+            for key, value in table.meta['corsika_sphere_radius'].items(): 
+                self.corsika_sphere_radius[key] = u.Quantity(value)
+
         
         # initialise telescope lists from productions
         # (require column names include 'prod' string)
@@ -112,7 +126,7 @@ class ArrayData:
 
         return None
 
-    def print_telescope_list(self):
+    def print_telescope_list(self, short_printout):
         """
         print list of telescopes in current layout
 
@@ -121,7 +135,10 @@ class ArrayData:
         - prod3b_mst_N - North layout (with MST-NectarCam)
         """
         for tel in self.telescope_list:
-            tel.print_telescope()
+            if short_printout:
+                tel.print_short_telescope_list()
+            else:
+                tel.print_telescope()
 
         return None
 
@@ -141,6 +158,16 @@ class ArrayData:
             print('\t Easting {0:0.2f}'.format(self.center_easting))
         print('\t Altitude {0:0.2f}'.format(self.center_altitude))
         print('\t EGSP %s' % (self.epsg))
+
+    def print_corsika_parameters(self):
+        """
+        print CORSIKA parameters defined in header of
+        ecsv file
+        """
+        print('CORSIKA parameters')
+        print('\t observation level {0:0.2f}'.format(self.corsika_obslevel))
+        print('\t sphere center ', self.corsika_sphere_center)
+        print('\t sphere radius ', self.corsika_sphere_radius)
 
     def convert_coordinates(self):
         """
@@ -178,10 +205,14 @@ class ArrayData:
         if not math.isnan(self.epsg):
             crs_utm = pyproj.CRS.from_user_input(self.epsg)
             logging.info('\t UTM system: {}'.format(crs_utm))
-
         # 2. convert coordinates
         for tel in self.telescope_list:
-            tel.convert(crs_local, wgs84, crs_utm, self.center_altitude)
+            tel.convert(crs_local, 
+                        wgs84, 
+                        crs_utm, 
+                        self.center_altitude,
+                        self.corsika_obslevel, 
+                        self.corsika_sphere_center)
 
     def compare_array_center(self, layout2):
         """
@@ -215,14 +246,47 @@ class ArrayData:
             self.center_altitude, layout2.center_altitude,
             self.center_altitude-layout2.center_altitude))
 
-    def compare_telescope_positions(self, layout2, compare_coordinate, tolerance=0.):
+     
+
+    def print_differences(self, layout2, tolerance_geod=0, tolerance_alt=0):
+        """
+        print differences between telescope positions
+        """
+
+        geod = pyproj.Geod(ellps="WGS84")
+
+        print('{0:6s} | {1:>14s} | {2:>14s} | {3:>14s} | {4:>14s} | {5:>14s} | {6:>14s} | {7:>12s} | {8:>12s}'.format(
+            'tel', 'E(layout_1)', 'N(layout_1)', 'alt(layout_1)', \
+            'N(layout_2)', 'E(layout_2)', 'alt(layout_2)', \
+            'dist', 'delta_alt'))
+        print('{0:6s} | {1:>14s} | {2:>14s} | {3:>14s} | {4:>14s} | {5:>14s} | {6:>14s} | {7:>12s} | {8:>10s} |'.format(
+            '-----', '-----', '-----', '-----', '-----', '-----', \
+            '-----', '-----', '-----'))
+        for tel_1 in self.telescope_list:
+            for tel_2 in layout2.telescope_list:
+                if tel_1.name != tel_2.name:
+                    continue
+                _, _, diff = geod.inv(
+                    tel_1.lon.value, tel_1.lat.value, 
+                    tel_2.lon.value, tel_2.lat.value)
+                if diff <= tolerance_geod and \
+                        abs(tel_1.alt.value-tel_2.alt.value) <= tolerance_alt:
+                    continue
+
+                print('{0:6s} | {1:12.2f} | {2:12.2f} | {3:12.2f} | {4:12.2f} | {5:12.2f} | {6:12.2f} | {7:10.2f} | {8:10.2f}'.format(
+                    tel_1.name,
+                    tel_1.utm_east, tel_1.utm_north, tel_1.alt,
+                    tel_2.utm_east, tel_2.utm_north, tel_2.alt,
+                    diff*u.meter, abs(tel_1.alt.value-tel_2.alt.value)*u.meter))
+
+    def compare_telescope_positions(self, layout2, tolerance_geod=0, tolerance_alt=0):
         """
         compare telescope positions of two telescope lists
         """
         print('')
         print('comparing telescope positions')
-        print('{0:s} coordinate system (tolerance {1:f})'.format(
-            compare_coordinate, tolerance))
+        print('  tolerance (pos) {0:f} m)'.format(tolerance_geod))
+        print('  tolerance (alt) {0:f} m)'.format(tolerance_alt))
         print('')
         # Step 1: make sure that lists are compatible
         for tel_1 in self.telescope_list:
@@ -236,115 +300,4 @@ class ArrayData:
                     tel_1.name))
 
         # Step 2: compare coordinate values
-        compare_telescope_positions_coordinates = getattr(self,
-            'compare_telescope_positions_'+compare_coordinate.lower())
-        compare_telescope_positions_coordinates(layout2, tolerance)
-     
-
-    def compare_telescope_positions_local(self, layout2, tolerance=0.):
-        """
-        compare telescope positions in local coordinates
-        """
-
-        print('{0:12s} | {1:>16s} | {2:>16s} | {3:>16s} | {4:>16s} | {5:>16s} | {6:>16s} |'.format(
-            'telescope', 'x(layout_1)', 'x(layout_2)', 'delta x',
-            'y(layout_1)', 'y(layout_2)', 'delta y'))
-        print('{0:12s} | {1:>16s} | {2:>16s} | {3:>16s} | {4:>16s} | {5:>16s} | {6:>16s} |'.format(
-            '-----', '-----', '-----', '-----',
-            '-----', '-----', '-----'))
-        for tel_1 in self.telescope_list:
-            for tel_2 in layout2.telescope_list:
-                if tel_1.name != tel_2.name:
-                    continue
-                diff = math.sqrt((tel_1.x.value-tel_2.x.value)**2
-                                 + (tel_1.y.value-tel_2.y.value)**2)
-                if diff <= tolerance:
-                    continue
-                print('{0:12s} | {1:14.2f} | {2:14.2f} | {3:14.2f} | {4:14.2f} | {5:14.2f} | {6:14.2f} |'.format(
-                    tel_1.name,
-                    tel_1.x, tel_2.x,
-                    tel_1.x-tel_2.x,
-                    tel_1.y, tel_2.y,
-                    tel_1.y-tel_2.y))
-
-    def compare_telescope_positions_utm(self, layout2, tolerance=0.):
-        """
-        compare telescope positions in utm coordinates
-        """
-
-        print('E=Easting, N=Northing')
-        print('')
-        print('{0:12s} | {1:>16s} | {2:>16s} | {3:>16s} | {4:>16s} | {5:>16s} | {6:>16s} |'.format(
-            'telescope', 'E(layout_1)', 'E(layout_2)', 'delta E',
-            'N(layout_1)', 'N(layout_2)', 'delta N'))
-        print('{0:12s} | {1:>16s} | {2:>16s} | {3:>16s} | {4:>16s} | {5:>16s} | {6:>16s} |'.format(
-            '-----', '-----', '-----', '-----',
-            '-----', '-----', '-----'))
-        for tel_1 in self.telescope_list:
-            for tel_2 in layout2.telescope_list:
-                if tel_1.name != tel_2.name:
-                    continue
-                diff = math.sqrt((tel_1.utm_east.value-tel_2.utm_east.value)**2
-                                 + (tel_1.utm_north.value-tel_2.utm_north.value)**2)
-                if diff <= tolerance:
-                    continue
-                print('{0:12s} | {1:14.2f} | {2:14.2f} | {3:14.2f} | {4:14.2f} | {5:14.2f} | {6:14.2f} |'.format(
-                    tel_1.name,
-                    tel_1.utm_east, tel_2.utm_east,
-                    tel_1.utm_east-tel_2.utm_east,
-                    tel_1.utm_north, tel_2.utm_north,
-                    tel_1.utm_north-tel_2.utm_north))
-
-    def compare_telescope_positions_mercator(self, layout2, tolerance=0.):
-        """
-        compare telescope positions in mercator coordinates
-        """
-
-        print('')
-        print('{0:12s} | {1:>18s} | {2:>18s} | {3:>18s} | {4:>18s} | {5:>18s} | {6:>18s} |'.format(
-            'telescope', 'lon(layout_1)', 'lon(layout_2)', 'delta lon',
-            'lat(layout_1)', 'lat(layout_2)', 'delta lat'))
-        print('{0:12s} | {1:>18s} | {2:>18s} | {3:>18s} | {4:>18s} | {5:>18s} | {6:>18s} |'.format(
-            '-----', '-----', '-----', '-----',
-            '-----', '-----', '-----'))
-        for tel_1 in self.telescope_list:
-            for tel_2 in layout2.telescope_list:
-                if tel_1.name != tel_2.name:
-                    continue
-                diff = math.sqrt((tel_1.lon.value-tel_2.lon.value)**2
-                                 + (tel_1.lat.value-tel_2.lat.value)**2)
-                if diff <= tolerance:
-                    continue    
-                print('{0:12s} | {1:14.5f} | {2:14.5f} | {3:14.5f} | {4:14.5f} | {5:14.5f} | {6:14.5f} |'.format(
-                    tel_1.name,
-                    tel_1.lon, tel_2.lon,
-                    tel_1.lon-tel_2.lon,
-                    tel_1.lat, tel_2.lat,
-                    tel_1.lat-tel_2.lat))
-
-    def compare_telescope_positions_altitude(self, layout2, tolerance=0.):
-        """
-        compare telescope altitude
-        """
-
-        print('')
-        print('{0:12s} | {1:>16s} | {2:>16s} | {3:>16s} | {4:>16s} | {5:>16s} | {6:>16s} |'.format(
-            'telescope', 'z(layout_1)', 'z(layout_2)', 'delta z',
-            'alt(layout_1)', 'alt(layout_2)', 'delta alt'))
-        print('{0:12s} | {1:>16s} | {2:>16s} | {3:>16s} | {4:>16s} | {5:>16s} | {6:>16s} |'.format(
-            '-----', '-----', '-----', '-----',
-            '-----', '-----', '-----'))
-
-        for tel_1 in self.telescope_list:
-            for tel_2 in layout2.telescope_list:
-                if tel_1.name != tel_2.name:
-                    continue
-                diff = abs(tel_1.alt.value-tel_2.alt.value)
-                if diff <= tolerance:
-                    continue
-                print('{0:12s} | {1:14.5f} | {2:14.5f} | {3:14.5f} | {4:14.5f} | {5:14.5f} | {6:14.5f} |'.format(
-                    tel_1.name,
-                    tel_1.z, tel_2.z,
-                    tel_1.z-tel_2.z,
-                    tel_1.alt, tel_2.alt,
-                    tel_1.alt-tel_2.alt))
+        self.print_differences(layout2, tolerance_geod, tolerance_alt)
