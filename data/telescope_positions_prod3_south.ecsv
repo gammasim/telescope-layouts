@@ -16,11 +16,15 @@
 # - center_alt: "2163m"
 # - center_northing: "7269466.0 m"
 # - center_easting: "366822.0 m"
+# - corsika_obs_level: "2147 m"
+# - corsika_sphere_radius: {LST: 12.5 m, MST: 9.6 m, SST: 3 m}
+# - corsika_sphere_center: {LST: 16 m, MST: 9 m, SST: 3.25 m}
 # - EPSG: 32719
 # - comments: |
 #       version 0.1
 #       coordinate centres using WGS84 system
-telescope_name    pos_x    pos_y   pos_z    prod3b_mst_F    prod3b_mst_N   baseline
+#       Note: z-positions are not correct!
+telescope_name    pos_x    pos_y   pos_z  prod3b_mst_F    prod3b_mst_N   baseline
 L-01          -20         -65      16         5          5    True
 L-02           80           0      16         6          6    True
 L-03          -20          65      16         4          4    True

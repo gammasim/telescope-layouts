@@ -10,8 +10,19 @@
 # meta: !!omap
 # - data_type: positionfile
 # - description: "telescope positions for CTA North (La Palma)"
+# - center_lon: "-17.8920302 deg"
+# - center_lat: "28.7621661 deg"
+# - center_alt: "2177m"
+# - center_northing: "3185066.0 m"
+# - center_easting: "217611.0 m"
+# - corsika_obs_level: "2157 m"
+# - corsika_sphere_radius: {LST: 12.5 m, MST: 9.6 m, SST: 3 m}
+# - corsika_sphere_center: {LST: 16 m, MST: 9 m, SST: 3.25 m}
+# - EPSG: 32628
 # - comments: |
 #       version 0.1
+#       UTM Zone 28
+#       Note: z-positions missing
 telescope_name    pos_x    pos_y    prod3b_mst_N    prod3b_mst_F    baseline
 L-01        7.23      -70.04           5             5    T
 L-02     -110.98      -34.37           6             6    T
