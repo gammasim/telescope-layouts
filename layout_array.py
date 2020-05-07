@@ -58,7 +58,7 @@ class ArrayData:
         if 'lon' in table.colnames:
             tel.lon = row['lon']*table['lon'].unit
         if 'lat' in table.colnames:
-            tel.utm_north = row['lat']*table['lat'].unit
+            tel.lat = row['lat']*table['lat'].unit
 
         for prod in prod_list:
             tel.prod_id[prod] = row[prod]
@@ -257,7 +257,7 @@ class ArrayData:
 
         print('{0:6s} | {1:>14s} | {2:>14s} | {3:>14s} | {4:>14s} | {5:>14s} | {6:>14s} | {7:>12s} | {8:>12s}'.format(
             'tel', 'E(layout_1)', 'N(layout_1)', 'alt(layout_1)', \
-            'N(layout_2)', 'E(layout_2)', 'alt(layout_2)', \
+            'E(layout_2)', 'N(layout_2)', 'alt(layout_2)', \
             'dist', 'delta_alt'))
         print('{0:6s} | {1:>14s} | {2:>14s} | {3:>14s} | {4:>14s} | {5:>14s} | {6:>14s} | {7:>12s} | {8:>10s} |'.format(
             '-----', '-----', '-----', '-----', '-----', '-----', \

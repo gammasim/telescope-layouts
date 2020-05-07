@@ -70,7 +70,7 @@ class TelescopeData:
         # calculate lon/lat of a telescope
         if math.isnan(self.lon.value) or math.isnan(self.lat.value):
             
-            self.lon, self.lat = u.deg * pyproj.transform(crs_local, wgs84,
+            self.lat, self.lon = u.deg * pyproj.transform(crs_local, wgs84,
                                                           self.x.value,
                                                           self.y.value)
 
@@ -169,6 +169,8 @@ class TelescopeData:
         """
         convert corsika z to altitude
         """
+        if not math.isnan(self.alt.value):
+            return
         self.alt = corsika_obslevel+self.z
         try:
             self.alt -= corsika_sphere_center[self.get_telescope_type(self.name)]
