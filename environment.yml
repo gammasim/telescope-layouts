@@ -2,16 +2,17 @@
 # 
 # Install: 
 # conda env create -f environment.yml
-# conda activate telescopes
+# conda activate telescope-layouts
 # 
-name: telescopes
+name: telescope-layouts
 
 dependencies:
+  - astropy
   - python==3.7
-  - proj
+  - pyproj
+  - pyyaml
   - pep8
   - pylint
   - numpy
-  - astropy
   - matplotlib
   - yaml
