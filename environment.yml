@@ -15,4 +15,3 @@ dependencies:
   - astropy
   - matplotlib
   - yaml
-  - yamllint
