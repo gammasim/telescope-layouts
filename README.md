@@ -8,7 +8,7 @@ Tools to calculate and plot array layouts and telescope positions
 
 ```bash
 conda env create -f environment.yml
-conda activate telescopes
+conda activate telescope-layouts
 ```
 
 ## Examples
@@ -16,17 +16,17 @@ conda activate telescopes
 Print a simple list of telescopes in all three coordinate systems
 
 ```python
-python ./print_layout.py --layout_list=data/layouts_south.yaml data/telescope_positions_south.ecsv
+python ./print_layout.py --layout_list=data/layouts_south.yaml data/telescope_positions_prod5_south.ecsv
 ```
 
 Compare two list of telescopes:
 
 Compare positions:
 ```python
-python compare_layouts.py data/telescope_positions_south.ecsv data/CTAO_20170929.ecsv
+python compare_layouts.py data/telescope_positions_prod5_south.ecsv data/CTAO_20170929.ecsv
 ```
 
-Compare altitude of telescopes (print only if differences are >1m)
+Compare altitude of telescopes (in this example print only if differences in altitude are >1m)
 ```python
-python compare_layouts.py --tolerance=1. data/telescope_positions_south.ecsv data/CTAO_20170929.ecsv
+python compare_layouts.py --tolerance_alt=1. data/telescope_positions_prod5_south.ecsv data/CTAO_20170929.ecsv
 ```
