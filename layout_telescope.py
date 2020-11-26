@@ -111,7 +111,7 @@ class TelescopeData:
         # calculate lon/lat of a telescope
         if math.isnan(self.lon.value) \
                 or math.isnan(self.lat.value):
-            self.lon, self.lat = u.deg * \
+            self.lat, self.lon = u.deg * \
                 pyproj.transform(crs_utm, wgs84,
                                  self.utm_east.value,
                                  self.utm_north.value)
