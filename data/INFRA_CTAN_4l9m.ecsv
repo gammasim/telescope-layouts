@@ -1,0 +1,43 @@
+# %ECSV 0.9
+# ---
+# datatype:
+# - {name: telescope_name, datatype: string, description: common telescope name}
+# - {name: utm_east, unit: m, datatype: float32}
+# - {name: utm_north, unit: m, datatype: float32}
+# - {name: alt, unit: m, datatype: float32, description: telescope position upwards relative to NNN}
+# meta: !!omap
+# - data_type: positionfile
+# - description: "telescope positions for CTA North (La Palma)"
+# - center_lon: "-17.8920302 deg"
+# - center_lat: "28.7621661 deg"
+# - center_alt: "2177m"
+# - center_northing: "3185066.0 m"
+# - center_easting: "217611.0 m"
+# - corsika_obs_level: "2158 m"
+# - corsika_sphere_radius: {LST: 12.5 m, MST: 9.6 m, SST: 3 m}
+# - corsika_sphere_center: {LST: 16 m, MST: 9 m, SST: 3.25 m}
+# - EPSG: 32628
+# - comments: |
+#       version n.n
+#       RZ - 2020, Nov 26
+#       coordinate centres using WGS84 system
+telescope_name utm_east utm_north alt
+LST1 217659.590 3184995.060 2185.0
+LST2 217542.210 3185033.610 2174.0
+LST3 217560.550 3185143.810 2170.7
+LST4 217674.540 3185096.630 2174.0
+MST1 217598.417 3184855.810 2199.3
+MST2 217436.441 3184918.090 2173.0 
+MST3 217401.117 3185099.180 2161.2
+MST4 217540.420 3185244.720 2158.0
+MST5 217801.686 3185202.723 2178.0
+MST6 217796.447 3184987.031 2191.2
+MST7 217771.396 3184847.458 2212.1
+MST8 217275.122 3184976.300 2157.7
+MST9 217969.963 3185280.330 2195.0
+MST10 217962.278 3185078.902 2211.3
+MST11 217939.617 3184861.776 2225.1
+MST12 217261.991 3184771.699 2170.3 
+MST13 217470.622 3184724.448 2206.0
+MST14 217678.349 3184689.381 2229.6
+MST15 217611.841 3185066.770 2178.0
