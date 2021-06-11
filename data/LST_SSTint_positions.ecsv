@@ -1,0 +1,31 @@
+# %ECSV 0.9
+# ---
+# datatype:
+# - {name: telescope_name, datatype: string, description: common telescope name}
+# - {name: utm_east, unit: m, datatype: float32}
+# - {name: utm_north, unit: m, datatype: float32}
+# meta: !!omap
+# - data_type: positionfile
+# - description: "telescope positions for CTA South (Paranal)"
+# - center_lon: "-70.316345 deg"
+# - center_lat: "-24.683429 deg"
+# - center_alt: "2162.35 m"
+# - center_northing: "7269466.0 m"
+# - center_easting: "366822.0 m"
+# - corsika_obs_level: "2147 m"
+# - corsika_sphere_radius: {LST: 12.5 m, MST: 9.6 m, SST: 3 m}
+# - corsika_sphere_center: {LST: 16 m, MST: 9 m, SST: 3.25 m}
+# - EPSG: 32719
+# - comments: |
+#       version 0.1
+#       coordinate centres using UTM system
+telescope_name utm_east utm_north
+L-01    366887.000  7269446.00
+L-02    366822.000  7269546.00
+L-03    366757.000  7269446.00
+L-04    366822.000  7269346.00
+S-115   367566.000  7269934.00
+S-116   366080.000  7269937.00
+S-117   366076.000  7269002.00
+S-118   367564.000  7268995.00
+S-119   366822.000  7269669.00
