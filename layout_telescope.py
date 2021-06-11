@@ -52,7 +52,9 @@ class TelescopeData:
         """
         print short list
         """
-        print("{0} {1:10.2f} {2:10.2f}".format(self.name, self.x.value, self.y.value))
+        #print("{0} {1:10.2f} {2:10.2f}".format(self.name, self.x.value, self.y.value))
+        # EVNDISP coordinates
+        print("{0} {1:10.2f} {2:10.2f}".format(self.name, -1.*self.y.value, self.x.value))
 
     def convert_local_to_mercator(self, crs_local, wgs84):
         """
