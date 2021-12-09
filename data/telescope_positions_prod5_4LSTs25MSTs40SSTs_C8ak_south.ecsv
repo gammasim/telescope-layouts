@@ -1,0 +1,90 @@
+# %ECSV 0.9
+# ---
+# datatype:
+# - {name: telescope_name, datatype: string, description: common telescope name}
+# - {name: pos_x, unit: m, datatype: float32, description: telescope position towards North relative to MST01 (central MST)}
+# - {name: pos_y, unit: m, datatype: float32, description: telescope position towards West relative to MST01 (central MST)}
+# - {name: pos_z, unit: m, datatype: float32, description: telescope position (centre of sphere) upwards relative to NNN}
+# meta: !!omap
+# - data_type: positionfile
+# - description: "telescope positions for CTA South (Paranal - C8ak configuration)"
+# - center_lon: "-70.316345 deg"
+# - center_lat: "-24.683429 deg"
+# - center_alt: "2162.35 m"
+# - center_northing: "7269466.0 m"
+# - center_easting: "366822.0 m"
+# - corsika_obs_level: "2147 m"
+# - corsika_sphere_radius: {LST: 12.5 m, MST: 9.6 m, SST: 3 m}
+# - corsika_sphere_center: {LST: 16 m, MST: 9 m, SST: 3.25 m}
+# - EPSG: 32719
+# - comments: |
+#       version 0.1
+#       UTM Zone 19 (S)
+#       prod5
+telescope_name    pos_x    pos_y   pos_z
+L-01      -20.643       -64.817      34.30
+L-02       79.994        -0.768      29.40
+L-03      -19.396        65.200      31.00
+L-04     -120.033         1.151      33.10
+M-01      -0.017      -0.001       24.35
+M-02      -1.468    -151.221          31
+M-03      -3.138    -325.245          39
+M-04       1.434      151.22          25
+M-05       3.104     325.243        23.5
+M-06     156.493     237.052          24
+M-07     147.428      74.202          21
+M-08     145.977     -77.019          26
+M-09     151.915    -240.013          30
+M-10    -151.949     240.011          27
+M-11A    -121.011      77.017          28
+M-12    -147.462     -74.203          28
+M-13A    -156.527    -213.054        38.5
+M-14     295.343     447.467          25
+M-15     317.086     159.593        18.5
+M-16     308.425       -2.96        19.5
+M-17     313.965     -165.65        22.5
+M-18     286.702    -453.054        38.5
+M-19    -286.835     453.054          17
+M-20    -313.599     165.646        30.5
+M-21    -338.459       2.959        29.5
+M-22     -316.72    -159.598          35
+M-23    -295.477    -447.468          52
+M-24     582.262      -5.588        13.5
+M-25    -582.296       5.587          36
+S-09       4.972     489.869       11.75
+S-10      -5.006    -489.871       41.25
+S-15     515.605     125.269        9.25
+S-16     513.494    -134.761       11.75
+S-17    -513.528      134.76       28.25
+S-18     -515.64    -125.269       30.25
+S-19       6.927     723.596       11.75
+S-20      -6.961    -723.599       59.75
+S-29B         785       -42.9        4.25
+S-30    -790.128        7.87       30.75
+S-31      228.46     794.887       25.25
+S-32     213.165    -799.128       56.25
+S-33    -213.198     799.125       10.25
+S-34    -228.495     -794.89       68.25
+S-73        -270         320          22
+S-74        -270        -320          40
+S-75         270         320          20
+S-76         270        -320          30
+S-77        -280         575          10
+S-78        -280    -575.001          50
+S-79         280         575          20
+S-80         280        -575          40
+S-95        -500         465          10
+S-96        -500        -465          52
+S-97         500         465          15
+S-98         500        -465          30
+S-99        -770         360          20
+S-100        -770        -360          53
+S-101         770         360          10
+S-102         770        -360          17
+S-107        -500         795          15
+S-108        -500        -795          75
+S-110         500        -795          53
+S-111        -810         655          12
+S-112        -810        -655          68
+S-519      203.01       -1.95          21
+S-520     -230.55        2.21          23
