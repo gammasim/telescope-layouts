@@ -18,6 +18,7 @@ class TelescopeData:
     def __init__(self):
         """Inits TelescopeData with blah."""
         self.name = None
+        self.geo_code = None
         self.x = math.nan * u.meter
         self.y = math.nan * u.meter
         self.z = math.nan * u.meter
@@ -33,6 +34,8 @@ class TelescopeData:
         print telescope name and positions
         """
         print('%s' % self.name)
+        if self.geo_code:
+            print('%s' % self.geo_code)
         if not math.isnan(self.x.value) \
                 and not math.isnan(self.y.value):
             print('\t CORSIKA x(->North): {0:0.2f} y(->West): {1:0.2f} z: {2:0.2f}'
@@ -58,10 +61,17 @@ class TelescopeData:
                                                    -1.*self.y.value,
                                                    self.x.value))
         elif compact_coordinates == 'corsika':
-            print("{0} {1:10.2f} {2:10.2f} {3:10.2f}".format(self.name,
-                                                             self.x.value,
-                                                             self.y.value,
-                                                             self.z.value))
+            if self.geo_code:
+                print("{0} {1:10.2f} {2:10.2f} {3:10.2f}   {4}".format(self.name,
+                                                                 self.x.value,
+                                                                 self.y.value,
+                                                                 self.z.value,
+                                                                 self.geo_code))
+            else:
+                print("{0} {1:10.2f} {2:10.2f} {3:10.2f}".format(self.name,
+                                                                 self.x.value,
+                                                                 self.y.value,
+                                                                 self.z.value))
         elif compact_coordinates == 'utm':
             print("{0} {1:10.2f} {2:10.2f} {3:10.2f}".format(self.name,
                                                              self.utm_east.value,

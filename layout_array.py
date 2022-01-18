@@ -44,6 +44,8 @@ class ArrayData:
 
         tel = layout_telescope.TelescopeData()
         tel.name = row['telescope_name']
+        if 'geo_code' in table.colnames:
+            tel.geo_code = row['geo_code']
         if 'pos_x' in table.colnames:
             tel.x = row['pos_x']*table['pos_x'].unit
         if 'pos_y' in table.colnames:
