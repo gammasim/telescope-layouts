@@ -48,13 +48,30 @@ class TelescopeData:
         if len(self.prod_id) > 0:
             print('\t', self.prod_id)
 
-    def print_short_telescope_list(self):
+    def print_short_telescope_list(self, compact_coordinates):
         """
-        print short list
+        print short list of telescope positions
+
         """
-        #print("{0} {1:10.2f} {2:10.2f}".format(self.name, self.x.value, self.y.value))
-        # EVNDISP coordinates
-        print("{0} {1:10.2f} {2:10.2f}".format(self.name, -1.*self.y.value, self.x.value))
+        if compact_coordinates == 'eventdisplay':
+            print("{0} {1:10.2f} {2:10.2f}".format(self.name,
+                                                   -1.*self.y.value,
+                                                   self.x.value))
+        elif compact_coordinates == 'corsika':
+            print("{0} {1:10.2f} {2:10.2f} {3:10.2f}".format(self.name,
+                                                             self.x.value,
+                                                             self.y.value,
+                                                             self.z.value))
+        elif compact_coordinates == 'utm':
+            print("{0} {1:10.2f} {2:10.2f} {3:10.2f}".format(self.name,
+                                                             self.utm_east.value,
+                                                             self.utm_north.value,
+                                                             self.alt.value))
+        elif compact_coordinates == 'mercator':
+            print("{0} {1:10.2f} {2:10.2f} {3:10.2f}".format(self.name,
+                                                             self.lon.value,
+                                                             self.lat.value,
+                                                             self.alt.value))
 
     def convert_local_to_mercator(self, crs_local, wgs84):
         """
