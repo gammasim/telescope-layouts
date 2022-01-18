@@ -3,7 +3,6 @@ arrayData class descripe an array of telescopes
 """
 
 import math
-import numpy as np
 from astropy.table import Table
 from astropy import units as u
 import logging
