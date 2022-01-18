@@ -27,8 +27,8 @@ def main():
                         help='layout to be used',
                         default='baseline')
     parser.add_argument('--compact',
-                        help='print compact list of telescope positions',
-                        type=bool, default=False)
+                        help='print list of telescope positions in coordinate system (corsika,utm,eventdisplay)',
+                        default='')
     args = parser.parse_args()
 
     layout = layout_array.ArrayData()

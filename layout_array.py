@@ -43,6 +43,8 @@ class ArrayData:
 
         tel = layout_telescope.TelescopeData()
         tel.name = row['telescope_name']
+        if 'geo_code' in table.colnames:
+            tel.geo_code = row['geo_code']
         if 'pos_x' in table.colnames:
             tel.x = row['pos_x']*table['pos_x'].unit
         if 'pos_y' in table.colnames:
@@ -64,19 +66,18 @@ class ArrayData:
             tel.prod_id[prod] = row[prod]
         return tel
 
-
     def read_telescope_list(self, telescope_file):
         """
         read list of telescopes from a ecsv file
         """
         try:
             table = Table.read(telescope_file, format='ascii.ecsv')
+            logging.info('reading telescope list from {}'.format(telescope_file))
         except Exception as ex:
             logging.error('Error reading telescope list from {}'.format(telescope_file))
             logging.error(ex.args)
             return False
-        logging.info('reading telescope list from {}'.format(telescope_file))
-        
+
         # require telescope_name in telescope lists
         if 'telescope_name' not in table.colnames:
             logging.error('Error reading telescope names from {}'
@@ -108,7 +109,6 @@ class ArrayData:
             for key, value in table.meta['corsika_sphere_radius'].items(): 
                 self.corsika_sphere_radius[key] = u.Quantity(value)
 
-        
         # initialise telescope lists from productions
         # (require column names include 'prod' string)
         prod_list = [row_name for row_name in table.colnames if row_name.find('prod') >= 0]
@@ -126,7 +126,7 @@ class ArrayData:
 
         return None
 
-    def print_telescope_list(self, short_printout):
+    def print_telescope_list(self, compact_coordinates):
         """
         print list of telescopes in current layout
 
@@ -135,8 +135,8 @@ class ArrayData:
         - prod3b_mst_N - North layout (with MST-NectarCam)
         """
         for tel in self.telescope_list:
-            if short_printout:
-                tel.print_short_telescope_list()
+            if len(compact_coordinates) > 0:
+                tel.print_short_telescope_list(compact_coordinates)
             else:
                 tel.print_telescope()
 
