@@ -18,17 +18,16 @@ def main():
     """
 
     parser = argparse.ArgumentParser(
-        description='print a list of telescopes (optional from a subarray)')
-    parser.add_argument('telescope_list',
-                        help='telescope list')
-    parser.add_argument('--layout_list',
-                        help='list of layouts')
-    parser.add_argument('--layout_name',
-                        help='layout to be used',
-                        default='baseline')
-    parser.add_argument('--compact',
-                        help='print list of telescope positions in coordinate system (corsika,utm,eventdisplay)',
-                        default='')
+        description="print a list of telescopes (optional from a subarray)"
+    )
+    parser.add_argument("telescope_list", help="telescope list")
+    parser.add_argument("--layout_list", help="list of layouts")
+    parser.add_argument("--layout_name", help="layout to be used", default="baseline")
+    parser.add_argument(
+        "--compact",
+        help="print list of telescope positions in coordinate system (corsika,utm,eventdisplay)",
+        default="",
+    )
     args = parser.parse_args()
 
     layout = layout_array.ArrayData()
@@ -40,5 +39,5 @@ def main():
         layout.print_telescope_list(args.compact)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

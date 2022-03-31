@@ -33,55 +33,70 @@ class TelescopeData:
         """
         print telescope name and positions
         """
-        print('%s' % self.name)
+        print("%s" % self.name)
         if self.geo_code:
-            print('%s' % self.geo_code)
-        if not math.isnan(self.x.value) \
-                and not math.isnan(self.y.value):
-            print('\t CORSIKA x(->North): {0:0.2f} y(->West): {1:0.2f} z: {2:0.2f}'
-                  .format(self.x, self.y, self.z))
-        if not math.isnan(self.utm_east.value) \
-                and not math.isnan(self.utm_north.value):
-            print('\t UTM East: {0:0.2f} UTM North: {1:0.2f} Alt: {2:0.2f}'
-                  .format(self.utm_east, self.utm_north, self.alt))
-        if not math.isnan(self.lon.value) \
-                and not math.isnan(self.lat.value):
-            print('\t Longitude: {0:0.5f} Latitude: {1:0.5f} Alt: {2:0.2f}'
-                  .format(self.lon, self.lat, self.alt))
+            print("%s" % self.geo_code)
+        if not math.isnan(self.x.value) and not math.isnan(self.y.value):
+            print(
+                "\t CORSIKA x(->North): {0:0.2f} y(->West): {1:0.2f} z: {2:0.2f}".format(
+                    self.x, self.y, self.z
+                )
+            )
+        if not math.isnan(self.utm_east.value) and not math.isnan(self.utm_north.value):
+            print(
+                "\t UTM East: {0:0.2f} UTM North: {1:0.2f} Alt: {2:0.2f}".format(
+                    self.utm_east, self.utm_north, self.alt
+                )
+            )
+        if not math.isnan(self.lon.value) and not math.isnan(self.lat.value):
+            print(
+                "\t Longitude: {0:0.5f} Latitude: {1:0.5f} Alt: {2:0.2f}".format(
+                    self.lon, self.lat, self.alt
+                )
+            )
         if len(self.prod_id) > 0:
-            print('\t', self.prod_id)
+            print("\t", self.prod_id)
 
     def print_short_telescope_list(self, compact_coordinates):
         """
         print short list of telescope positions
 
         """
-        if compact_coordinates == 'eventdisplay':
-            print("{0} {1:10.2f} {2:10.2f}".format(self.name,
-                                                   -1.*self.y.value,
-                                                   self.x.value))
-        elif compact_coordinates == 'corsika':
+        if compact_coordinates == "eventdisplay":
+            print(
+                "{0} {1:10.2f} {2:10.2f}".format(
+                    self.name, -1.0 * self.y.value, self.x.value
+                )
+            )
+        elif compact_coordinates == "corsika":
             if self.geo_code:
-                print("{0} {1:10.2f} {2:10.2f} {3:10.2f}   {4}".format(self.name,
-                                                                 self.x.value,
-                                                                 self.y.value,
-                                                                 self.z.value,
-                                                                 self.geo_code))
+                print(
+                    "{0} {1:10.2f} {2:10.2f} {3:10.2f}   {4}".format(
+                        self.name,
+                        self.x.value,
+                        self.y.value,
+                        self.z.value,
+                        self.geo_code,
+                    )
+                )
             else:
-                print("{0} {1:10.2f} {2:10.2f} {3:10.2f}".format(self.name,
-                                                                 self.x.value,
-                                                                 self.y.value,
-                                                                 self.z.value))
-        elif compact_coordinates == 'utm':
-            print("{0} {1:10.2f} {2:10.2f} {3:10.2f}".format(self.name,
-                                                             self.utm_east.value,
-                                                             self.utm_north.value,
-                                                             self.alt.value))
-        elif compact_coordinates == 'mercator':
-            print("{0} {1:10.2f} {2:10.2f} {3:10.2f}".format(self.name,
-                                                             self.lon.value,
-                                                             self.lat.value,
-                                                             self.alt.value))
+                print(
+                    "{0} {1:10.2f} {2:10.2f} {3:10.2f}".format(
+                        self.name, self.x.value, self.y.value, self.z.value
+                    )
+                )
+        elif compact_coordinates == "utm":
+            print(
+                "{0} {1:10.2f} {2:10.2f} {3:10.2f}".format(
+                    self.name, self.utm_east.value, self.utm_north.value, self.alt.value
+                )
+            )
+        elif compact_coordinates == "mercator":
+            print(
+                "{0} {1:10.2f} {2:10.2f} {3:10.2f}".format(
+                    self.name, self.lon.value, self.lat.value, self.alt.value
+                )
+            )
 
     def convert_local_to_mercator(self, crs_local, wgs84):
         """
@@ -98,10 +113,11 @@ class TelescopeData:
 
         # calculate lon/lat of a telescope
         if math.isnan(self.lon.value) or math.isnan(self.lat.value):
-            
-            self.lat, self.lon = u.deg * pyproj.transform(crs_local, wgs84,
-                                                          self.x.value,
-                                                          self.y.value)
+
+            transformer = pyproj.Transformer.from_crs(crs_local, wgs84)
+            self.lat, self.lon = u.deg * transformer.transform(
+                self.x.value, self.y.value
+            )
 
     def convert_local_to_utm(self, crs_local, crs_utm):
         """
@@ -118,10 +134,10 @@ class TelescopeData:
 
         # calculate utms of a telescope
         if math.isnan(self.utm_east.value) or math.isnan(self.utm_north.value):
-            self.utm_east, self.utm_north = \
-                u.meter * \
-                pyproj.transform(crs_local, crs_utm,
-                                 self.x.value, self.y.value)
+            transformer = pyproj.Transformer.from_crs(crs_local, crs_utm)
+            self.utm_east, self.utm_north = u.meter * transformer.transform(
+                self.x.value, self.y.value
+            )
 
     def convert_utm_to_mercator(self, crs_utm, wgs84):
         """
@@ -133,17 +149,15 @@ class TelescopeData:
             return
 
         # require valid position in UTM
-        if math.isnan(self.utm_east.value) \
-                or math.isnan(self.utm_north.value):
+        if math.isnan(self.utm_east.value) or math.isnan(self.utm_north.value):
             return
 
         # calculate lon/lat of a telescope
-        if math.isnan(self.lon.value) \
-                or math.isnan(self.lat.value):
-            self.lat, self.lon = u.deg * \
-                pyproj.transform(crs_utm, wgs84,
-                                 self.utm_east.value,
-                                 self.utm_north.value)
+        if math.isnan(self.lon.value) or math.isnan(self.lat.value):
+            transformer = pyproj.Transformer.from_crs(crs_utm, wgs84)
+            self.lat, self.lon = u.deg * transformer.transform(
+                self.utm_east.value, self.utm_north.value
+            )
 
     def convert_utm_to_local(self, crs_utm, crs_local):
         """
@@ -155,26 +169,25 @@ class TelescopeData:
             return
 
         # require valid position in UTM
-        if math.isnan(self.utm_east.value) \
-                or math.isnan(self.utm_north.value):
+        if math.isnan(self.utm_east.value) or math.isnan(self.utm_north.value):
             return
 
         if math.isnan(self.x.value) or math.isnan(self.y.value):
-            self.x, self.y = u.meter * \
-                pyproj.transform(crs_utm, crs_local,
-                                 self.utm_east.value,
-                                 self.utm_north.value)
+            transformer = pyproj.Transformer.from_crs(crs_utm, crs_local)
+            self.x, self.y = u.meter * transformer.transform(
+                self.utm_east.value, self.utm_north.value
+            )
 
     def get_telescope_type(self, name):
         """
         guestimate telescope type from telescope name
         """
-        if name[0:1] is 'L':
-            return 'LST'
-        elif name[0:1] is 'M':
-            return 'MST'
-        elif name[0:1] is 'S':
-            return 'SST'
+        if name[0:1] == "L":
+            return "LST"
+        elif name[0:1] == "M":
+            return "MST"
+        elif name[0:1] == "S":
+            return "SST"
         return None
 
     def convert_asl_to_corsika(self, corsika_obslevel, corsika_sphere_center):
@@ -185,32 +198,42 @@ class TelescopeData:
         # require valid center altitude values
         if math.isnan(corsika_obslevel.value):
             return
-        if math.isnan(self.z.value) and \
-            not math.isnan(self.alt.value):
-            self.z = self.alt-corsika_obslevel
+        if math.isnan(self.z.value) and not math.isnan(self.alt.value):
+            self.z = self.alt - corsika_obslevel
             try:
                 self.z += corsika_sphere_center[self.get_telescope_type(self.name)]
             except KeyError:
-                logging.error('Failed finding corsika sphere center for {} (to corsika)'.format(
-                    self.get_telescope_type(self.name)))
+                logging.error(
+                    "Failed finding corsika sphere center for {} (to corsika)".format(
+                        self.get_telescope_type(self.name)
+                    )
+                )
 
-    def convert_corsika_to_asl(self,corsika_obslevel, corsika_sphere_center):
+    def convert_corsika_to_asl(self, corsika_obslevel, corsika_sphere_center):
         """
         convert corsika z to altitude
         """
         if not math.isnan(self.alt.value):
             return
-        self.alt = corsika_obslevel+self.z
+        self.alt = corsika_obslevel + self.z
         try:
             self.alt -= corsika_sphere_center[self.get_telescope_type(self.name)]
         except KeyError:
-            logging.error('Failed finding corsika sphere center for {} (to asl)'.format(
-                self.get_telescope_type(self.name)))
+            logging.error(
+                "Failed finding corsika sphere center for {} (to asl)".format(
+                    self.get_telescope_type(self.name)
+                )
+            )
 
-
-    def convert(self, crs_local, wgs84, crs_utm, 
+    def convert(
+        self,
+        crs_local,
+        wgs84,
+        crs_utm,
         center_altitude,
-        corsika_obslevel, corsika_sphere_center):
+        corsika_obslevel,
+        corsika_sphere_center,
+    ):
         """
         calculate telescope positions in missing coordinate
         systems
