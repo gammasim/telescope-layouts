@@ -188,7 +188,7 @@ class TelescopeData:
             return "MST"
         elif name[0:1] == "S":
             return "SST"
-        return None
+        return "CALIB"
 
     def convert_asl_to_corsika(self, corsika_obslevel, corsika_sphere_center):
         """
@@ -203,11 +203,7 @@ class TelescopeData:
             try:
                 self.z += corsika_sphere_center[self.get_telescope_type(self.name)]
             except KeyError:
-                logging.error(
-                    "Failed finding corsika sphere center for {} (to corsika)".format(
-                        self.get_telescope_type(self.name)
-                    )
-                )
+                pass
 
     def convert_corsika_to_asl(self, corsika_obslevel, corsika_sphere_center):
         """
@@ -219,11 +215,7 @@ class TelescopeData:
         try:
             self.alt -= corsika_sphere_center[self.get_telescope_type(self.name)]
         except KeyError:
-            logging.error(
-                "Failed finding corsika sphere center for {} (to asl)".format(
-                    self.get_telescope_type(self.name)
-                )
-            )
+            pass
 
     def convert(
         self,

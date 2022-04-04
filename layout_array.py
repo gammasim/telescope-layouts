@@ -42,7 +42,10 @@ class ArrayData:
         """
 
         tel = layout_telescope.TelescopeData()
-        tel.name = row["telescope_name"]
+        if "telescope_name" in table.colnames:
+            tel.name = row["telescope_name"]
+        if "asset_code" in table.colnames and "sequence_number" in table.colnames:
+            tel.name = row["asset_code"] + "-" + row["sequence_number"]
         if "geo_code" in table.colnames:
             tel.geo_code = row["geo_code"]
         if "pos_x" in table.colnames:
@@ -79,11 +82,13 @@ class ArrayData:
             return False
 
         # require telescope_name in telescope lists
-        if "telescope_name" not in table.colnames:
+        if ("telescope_name" not in table.colnames and
+            "asset_code" not in table.colnames and
+             "sequence_number" not in table.colnames):
             logging.error(
                 "Error reading telescope names from {}".format(telescope_file)
             )
-            logging.error("   required column telescope_name missing")
+            logging.error("   required column telescope_name or asset_code missing")
             logging.error(table.meta)
             return False
 
