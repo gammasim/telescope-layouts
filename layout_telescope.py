@@ -87,8 +87,12 @@ class TelescopeData:
                 )
         elif compact_coordinates == "utm":
             print(
-                "{0} {1:10.2f} {2:10.2f} {3:10.2f}".format(
-                    self.name, self.utm_east.value, self.utm_north.value, self.alt.value
+                "{0} {1:10.2f} {2:10.2f} {3:10.2f}   {4}".format(
+                    self.name,
+                    self.utm_east.value,
+                    self.utm_north.value,
+                    self.alt.value,
+                    self.geo_code,
                 )
             )
         elif compact_coordinates == "mercator":
